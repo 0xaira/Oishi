@@ -1,26 +1,27 @@
-import logo from "../img/logo.png";
+import { useState } from "react";
+import Title from "./Title";
 
-  const Header = () => {
-    return (
-      <>
-        <header>
-          <nav className="navbar">
-          <div className="logo">
-        <img
-          className="w-16 sm:w-20 md:w-24 lg:w-28 xl:w-30 duration-200 ease-in"
-          src={logo}
-          alt="Logo"
-        />
+const Header = () => {
+  const [isLogged, setIsLogged] = useState(false);
+  const handleLogin = () => setIsLogged(!isLogged);
+  return (
+    <div className="head">
+      <Title />
+      <div className="nav-items">
+        <ul>
+          <li>Home</li>
+          <li>About</li>
+          <li>Contact</li>
+          <li>Cart</li>
+          <li>
+            <button className="login-button" onClick={handleLogin}>
+              {isLogged ? "Logout" : "Login"}
+            </button>
+          </li>
+        </ul>
       </div>
-            <ul>
-              <li>Home</li>
-              <li>Menu</li>
-              <li>Cart</li>
-            </ul>
-          </nav>
-        </header>
-      </>
-    );
-  };
+    </div>
+  );
+};
 
-    export default Header;
+export default Header;
