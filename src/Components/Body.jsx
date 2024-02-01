@@ -2,14 +2,10 @@ import RestaurantCard from "./RestaurantCard";
 import { useState, useEffect } from "react";
 import Shimmer from "./Shimmer";
 import { API_URL } from "../Utils/constants";
-
-function filterData(searchText, restaurants) {
-  const resFilterData = restaurants.filter((restaurant) =>
-    restaurant?.info?.name.toLowerCase().includes(searchText.toLowerCase())
-  );
-  return resFilterData;
-}
-
+import { Link } from "react-router-dom";
+import WhatsOnYourMind from "../Carousel/WhatsOnYourMind";
+import CarouselShimmerUI from "../Carousel/CarouselShimmerUI";
+import { CiSearch } from "react-icons/ci";
 const Body = () => {
   const [searchText, setSearchText] = useState("");
   const [allRestaurants, setAllRestaurants] = useState([]);
@@ -38,75 +34,95 @@ const Body = () => {
       const resData = await checkJsonData(json);
       setAllRestaurants(resData);
       setFilteredRestaurants(resData);
+      console.log(resData);
     } catch (error) {
       console.log(error);
     }
   }
 
-  const searchData = (searchText, restaurants) => {
-    if (searchText !== "") {
-      const filteredData = filterData(searchText, restaurants);
-      setFilteredRestaurants(filteredData);
-      setErrorMessage("");
-      if (filteredData?.length === 0) {
-        setErrorMessage("No matches restaurant found");
-      }
-    } else {
-      setErrorMessage("");
-      setFilteredRestaurants(restaurants);
-    }
+  if (!allRestaurants) return null;
+
+  const filterPureVeg = () => {
+    const pureVegRestaurants = allRestaurants.filter((res) => res.info.veg === true);
+    setFilteredRestaurants(pureVegRestaurants);
   };
 
-  if (!allRestaurants) return null;
+  const filterFastDelivery = () => {
+    const fastDeliveryRestaurants = allRestaurants.filter((res) => res.info.sla.deliveryTime < 25);
+    setFilteredRestaurants(fastDeliveryRestaurants);
+  };
 
   return (
     <>
-      <div className="search-container p-4 bg-gray-100 rounded-lg shadow-md mb-4 ml-[600px] ">
-        <input
-          type="text"
-          className="search-input border border-gray-300 p-2 rounded-md w-[500px]"
-          placeholder="Search a restaurant you want..."
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-        />
-        <button
-          className="search-btn bg-orange-500 text-white px-4 py-2 ml-2 rounded-md hover:bg-orange-600 focus:outline-none focus:ring focus:border-blue-300"
-          onClick={() => {
-            searchData(searchText, allRestaurants);
-          }}
-        >
-          Search
-        </button>
+      <div className="flex justify-between items-center  flex-col lg:px-16 lg:my-10 md:px-16 px-6 my-2 md:my-5 w-full ">
 
-        <button
-          className="search-btn bg-orange-500 text-white px-4 py-2 ml-2 rounded-md hover:bg-orange-600 focus:outline-none focus:ring focus:border-blue-300"
-          onClick={() => {
-            const topRes = allRestaurants.filter((res) => res.info.avgRating > 4.5);
-            console.log(topRes);
-            setTopRestaurants(topRes);
-            // Update filteredRestaurants state as well
-            setFilteredRestaurants(topRes);
-          }}
-        >
-          Top Restaurants
-        </button>
+        <div className="ml-36 mt-12 mx-auto">
+          <input
+            type="text"
+            className="bg-transparent border-2 shadow-md border-solid border-zinc-300 px-1.5 text-xs lg:text-base lg:px-3.5 py-1 lg:py-1.5 rounded-2xl lg:rounded-3xl mr-1 lg:mr-4 w-80"
+            placeholder="Search a restaurant you want..."
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+          <button
+            className="bg-transparent border-2 shadow-md border-solid border-zinc-300 px-1.5 text-xs lg:text-base lg:px-3.5 py-1 lg:py-1.5 rounded-2xl lg:rounded-3xl mr-1 lg:mr-4 "
+            onClick={() => {
+              const filteredRestaurantsList = allRestaurants.filter((res) =>
+                res.info.name.toLowerCase().includes(searchText.toLowerCase())
+              );
+              setFilteredRestaurants(filteredRestaurantsList);
+            }}
+          >
+            <CiSearch />
+          </button>
 
+          <button
+            className="bg-transparent border-2 shadow-md border-solid border-zinc-300 px-1.5 text-xs lg:text-base lg:px-3.5 py-1 lg:py-1.5 rounded-2xl lg:rounded-3xl mr-1 lg:mr-4"
+            onClick={() => {
+              const topRes = allRestaurants.filter((res) => res.info.avgRating > 4.5);
+              console.log(topRes);
+              setTopRestaurants(topRes);
+              setFilteredRestaurants(topRes);
+            }}
+          >
+            Top Restaurants
+          </button>
 
-      </div>
+          <button
+            className="bg-transparent border-2 shadow-md border-solid border-zinc-300 px-1.5 text-xs lg:text-base lg:px-3.5 py-1 lg:py-1.5 rounded-2xl lg:rounded-3xl mr-1 lg:mr-4"
+            onClick={filterPureVeg}
+          >
+            Pure Veg
+          </button>
 
-      {errorMessage && <div className="error-container">{errorMessage}</div>}
-
-      {allRestaurants?.length === 0 ? (
-        <Shimmer />
-      ) : (
-        <div className="flex flex-wrap ml-[100px]">
-          {filteredRestaurants.map((restaurant) => {
-            return (
-              <RestaurantCard key={restaurant?.info?.id} {...restaurant?.info} />
-            );
-          })}
+          <button
+            className="bg-transparent border-2 shadow-md border-solid border-zinc-300 px-1.5 text-xs lg:text-base lg:px-3.5 py-1 lg:py-1.5 rounded-2xl lg:rounded-3xl mr-1 lg:mr-4"
+            onClick={filterFastDelivery}
+          >
+            Fast Delivery
+          </button>
         </div>
-      )}
+
+        {errorMessage && <div className="text-red-500 font-bold ml-64">{errorMessage}</div>}
+
+        {allRestaurants?.length === 0 ? (
+          <>
+          
+        <Shimmer />
+        </>
+      ) : (
+        <>
+       
+        <div className="flex justify-center lg:justify-start items-center  flex-wrap gap-7 my-2 px-12 mt-12 ">
+          {filteredRestaurants.map((restaurant) => (
+            <Link to={"/restaurant/" + restaurant?.info?.id} key={restaurant?.info?.id}>
+              <RestaurantCard {...restaurant?.info} />
+            </Link>
+            ))}
+          </div>
+          </>
+        )}
+      </div>
     </>
   );
 };
