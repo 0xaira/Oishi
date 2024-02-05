@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Shimmer from './Shimmer';
+
 import {
   MENU_API_URL,
   MENU_IMG_CDN_URL,
@@ -13,6 +14,9 @@ import RestaurantCategory from './RestaurantCategory';
 
 const RestaurantMenu = () => {
   const { resId } = useParams();
+  const [showIndex, setShowIndex] = useState(null);
+  const [showItems, setShowItems] = useState(false);
+  
   const [restaurant, setRestaurant] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
   const [categories, setCategories] = useState([]); // Added state for categories
@@ -48,9 +52,8 @@ const RestaurantMenu = () => {
         }
       });
       setMenuItems(uniqueMenuItems);
-      
 
-      // Moved categories definition to the state
+
       const categories =
         json?.data?.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter(
           (c) =>
@@ -58,7 +61,7 @@ const RestaurantMenu = () => {
             'type.googleapis.com/swiggy.presentation.food.v2.ItemCategory'
         ) || [];
       setCategories(categories);
-      
+
 
     } catch (error) {
       setMenuItems([]);
@@ -71,7 +74,7 @@ const RestaurantMenu = () => {
   return !restaurant ? (
     <Shimmer />
   ) : (
-    <div className=" mx-auto max-w-2xl"> {/* Center content and limit width */}
+    <div className=" mx-auto max-w-2xl">
       <div className=" flex items-center justify-between mt-6">
         <img
           className=" w-36 rounded-lg"
@@ -83,13 +86,12 @@ const RestaurantMenu = () => {
           <p className=" text-gray-500">{restaurant?.cuisines?.join(', ')}</p>
           <div className=" flex items-center mt-2">
             <div
-              className={` rounded-full px-2 ${
-                restaurant?.avgRating < 4
-                  ? 'bg-red-300'
-                  : restaurant?.avgRating === '--'
+              className={` rounded-full px-2 ${restaurant?.avgRating < 4
+                ? 'bg-red-300'
+                : restaurant?.avgRating === '--'
                   ? 'bg-white text-black'
                   : 'bg-green-500 text-white'
-              }`}
+                }`}
             >
               <i className="fa-solid fa-star"></i>
               <span>{restaurant?.avgRating}</span>
@@ -103,11 +105,13 @@ const RestaurantMenu = () => {
       </div>
 
       <div>
-          {categories.map((category) => (
-            <RestaurantCategory key={category.id} data={category?.card?.card} />
-          ))}
-        </div>
-      
+        {categories.map((category, index) => (
+          <RestaurantCategory key={category.id} data={category?.card?.card} showItems={index === showIndex ? true : false} setShowIndex={() => setShowIndex(index)}
+
+          />
+        ))}
+      </div>
+
     </div>
   );
 };

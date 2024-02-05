@@ -7,9 +7,9 @@ const CarouselShimmerUI = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setShowImage('second');
-        }, 1000); // Change this to the number of milliseconds you want to wait
+        }, 1000); 
 
-        return () => clearTimeout(timer); // This will clear the timer when the component unmounts
+        return () => clearTimeout(timer); 
     }, []);
 
     return(

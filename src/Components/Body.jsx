@@ -3,8 +3,6 @@ import { useState, useEffect } from "react";
 import Shimmer from "./Shimmer";
 import { API_URL } from "../Utils/constants";
 import { Link } from "react-router-dom";
-import WhatsOnYourMind from "../Carousel/WhatsOnYourMind";
-import CarouselShimmerUI from "../Carousel/CarouselShimmerUI";
 import { CiSearch } from "react-icons/ci";
 const Body = () => {
   const [searchText, setSearchText] = useState("");
@@ -54,7 +52,7 @@ const Body = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center  flex-col lg:px-16 lg:my-10 md:px-16 px-6 my-2 md:my-5 w-full ">
+      <div className="flex justify-between items-center flex-col lg:px-[105px] lg:my-10  md:px-16 px-6 my-2 md:my-5 w-full overflow-x-hidden">
 
         <div className="ml-36 mt-12 mx-auto">
           <input

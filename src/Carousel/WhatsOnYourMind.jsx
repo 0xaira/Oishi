@@ -50,8 +50,8 @@ const WhatsOnYourMind = (props) => {
     <>
       <div className="mt-8"></div>
       <span
-        className="w-full text-left pb-6 px-6 mt-28 font-black text-2xl tracking-tight ml-36 "
-        style={{ wordSpacing: 3.5, marginTop: "100px" }}
+        className="w-full text-left pb-6 px-6 mt-10 md:mt-28 font-black text-2xl tracking-tight md:ml-36 "
+        style={{ wordSpacing: 3.5 }}
       >
         What's on your mind?
       </span>

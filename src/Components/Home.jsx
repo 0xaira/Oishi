@@ -6,11 +6,8 @@ import WhatsOnYourMind from '../Carousel/WhatsOnYourMind'
 const Home = () => {
   return (
     <>   
-    <WhatsOnYourMind />
-    
-    <Body />
-
-    
+    <WhatsOnYourMind />    
+    <Body />   
     <Footer />
     </>
 
