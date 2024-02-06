@@ -1,9 +1,14 @@
 import React from 'react';
 import { IMG_CDN_URL } from '../Utils/constants';
+import { useDispatch } from 'react-redux';
+import { addItem } from '../Utils/cartSlice';
 
 const ItemList = (props) => {
   const { items } = props;
-
+  const dispatch = useDispatch();
+  const handleAddItem =(item) =>{
+    dispatch(addItem(item));
+  }
   return (
     <div>
       {items.map((item) => (
@@ -34,7 +39,9 @@ const ItemList = (props) => {
               alt={item.card.info.name}
             />
             <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
-              <button className="p-2 px-4 rounded-lg bg-white text-green-500 hover:bg-green-100 focus:outline-none shadow-lg font-bold">
+              <button className="p-2 px-4 rounded-lg bg-white text-green-500 hover:bg-green-100 focus:outline-none shadow-lg font-bold" 
+              onClick={()=>handleAddItem(item)}
+              >
                 Add +
               </button>
             </div>

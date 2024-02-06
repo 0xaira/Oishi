@@ -8,11 +8,12 @@ import Home from "./Components/Home";
 import Search from "./Components/Search";
 
 import ErrorPage from './Components/ErrorPage';
-
+import Cart from './Components/Cart';
 import { createRoot } from "react-dom/client";
 import RestaurantMenu from './Components/RestaurantMenu';
 import HelpAndSupport from './Components/HelpAndSupport';
-
+import { Provider } from 'react-redux';
+import appStore from '../src/Utils/appStore';
 
 const AppLayout = () => {
   return (
@@ -47,6 +48,10 @@ const appRouter = createBrowserRouter([
         element: <Offers />,
       },
       {
+        path: "cart",
+        element: <Cart />,
+      },
+      {
         path: "/restaurant/:resId",
         element: <RestaurantMenu />,
       },
@@ -57,6 +62,9 @@ const appRouter = createBrowserRouter([
 
 ])
 createRoot(document.getElementById('root')).render(
-  <RouterProvider router={appRouter} />
+  <Provider store={appStore}>
+    <RouterProvider router={appRouter} />
+  </Provider>
+  
 );
 
